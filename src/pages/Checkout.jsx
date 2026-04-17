@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { db } from "../firebase/config";
+import { addDoc, collection } from "firebase/firestore";
+import { auth } from "../firebase/config";
 
 export default function Checkout({ producto, regresar }) {
     const [nombre, setNombre] = useState("");
@@ -10,7 +13,7 @@ export default function Checkout({ producto, regresar }) {
     const [cvv, setCvv] = useState("");
     const [fecha, setFecha] = useState("");
 
-    const simularPago = () => {
+    const simularPago = async () => {
         if (!nombre || !direccion) {
             alert("Completa tus datos");
             return;
@@ -18,9 +21,27 @@ export default function Checkout({ producto, regresar }) {
 
         setCargando(true);
 
-        setTimeout(() => {
+        setTimeout(async () => {
             setCargando(false);
             setPagado(true);
+
+            try {
+                await addDoc(collection(db, "compra"), {
+                    usuario: auth.currentUser?.email,
+                    producto: producto.nombre,
+                    precio: producto.precio,
+                    talla: producto.talla,
+                    color: producto.color,
+                    nombreCliente: nombre,
+                    direccion: direccion,
+                    fecha: new Date()
+                });
+
+                console.log("Compra guardada en Firebase ✅");
+            } catch (error) {
+                console.error("Error al guardar:", error);
+            }
+
         }, 2000);
     };
 
