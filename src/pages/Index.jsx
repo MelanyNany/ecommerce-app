@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Index({ goToCheckout }) {
+export default function Index({ goToCheckout, agregarAlCarrito, irAlCarrito }) {
     const productos = [
         { id: 1, nombre: "Playera", precio: 300 },
         { id: 2, nombre: "Pantalon", precio: 800 },
@@ -36,7 +36,18 @@ export default function Index({ goToCheckout }) {
                             <option value="Rojo">Rojo</option>
                             <option value="Azul">Azul</option>
                         </select>
-
+                        <button
+                            onClick={() =>
+                                agregarAlCarrito({
+                                    ...p,
+                                    talla,
+                                    color,
+                                })
+                            }
+                            className="bg-yellow-500 text-white w-full mt-2 p-2 rounded"
+                        >
+                            Agregar al carrito
+                        </button>
                         {/* 🔥 ENVIAMOS TODO */}
                         <button
                             onClick={() =>
@@ -49,6 +60,12 @@ export default function Index({ goToCheckout }) {
                             className="bg-green-500 text-white w-full mt-3 p-2 rounded"
                         >
                             Comprar
+                        </button>
+                        <button
+                            onClick={irAlCarrito}
+                            className="bg-black text-white p-2 rounded mb-4"
+                        >
+                            Ver carrito
                         </button>
                     </div>
                 );
