@@ -1,75 +1,55 @@
-import { useState } from "react";
+import ProductoCard from "../components/ProductoCard";
 
 export default function Index({ goToCheckout, agregarAlCarrito, irAlCarrito }) {
     const productos = [
-        { id: 1, nombre: "Playera", precio: 300 },
-        { id: 2, nombre: "Pantalon", precio: 800 },
-        { id: 3, nombre: "Chamarra", precio: 600 },
+        {
+            id: 1,
+            nombre: "Playera",
+            precio: 300,
+            imagen: "https://via.placeholder.com/300x200?text=Playera",
+        },
+        {
+            id: 2,
+            nombre: "Pantalón",
+            precio: 800,
+            imagen: "https://via.placeholder.com/300x200?text=Pantalon",
+        },
+        {
+            id: 3,
+            nombre: "Chamarra",
+            precio: 600,
+            imagen: "https://via.placeholder.com/300x200?text=Chamarra",
+        },
     ];
 
     return (
-        <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-            {productos.map((p) => {
-                const [talla, setTalla] = useState("S");
-                const [color, setColor] = useState("Rojo");
+        <div className="min-h-screen bg-black p-6">
 
-                return (
-                    <div key={p.id} className="bg-white p-4 rounded-xl shadow">
-                        <h2 className="text-lg font-bold">{p.nombre}</h2>
-                        <p className="text-gray-600">${p.precio}</p>
+            {/* HEADER */}
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-3xl font-bold text-purple-400">
+                    🛍️ Tienda Neon
+                </h1>
 
-                        {/* TALLA */}
-                        <select
-                            className="w-full mt-2 border p-2 rounded"
-                            onChange={(e) => setTalla(e.target.value)}
-                        >
-                            <option value="S">Talla S</option>
-                            <option value="M">Talla M</option>
-                            <option value="L">Talla L</option>
-                        </select>
+                <button
+                    onClick={irAlCarrito}
+                    className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl"
+                >
+                    Ver carrito
+                </button>
+            </div>
 
-                        {/* COLOR */}
-                        <select
-                            className="w-full mt-2 border p-2 rounded"
-                            onChange={(e) => setColor(e.target.value)}
-                        >
-                            <option value="Rojo">Rojo</option>
-                            <option value="Azul">Azul</option>
-                        </select>
-                        <button
-                            onClick={() =>
-                                agregarAlCarrito({
-                                    ...p,
-                                    talla,
-                                    color,
-                                })
-                            }
-                            className="bg-yellow-500 text-white w-full mt-2 p-2 rounded"
-                        >
-                            Agregar al carrito
-                        </button>
-                        {/* 🔥 ENVIAMOS TODO */}
-                        <button
-                            onClick={() =>
-                                goToCheckout({
-                                    ...p,
-                                    talla,
-                                    color,
-                                })
-                            }
-                            className="bg-green-500 text-white w-full mt-3 p-2 rounded"
-                        >
-                            Comprar
-                        </button>
-                        <button
-                            onClick={irAlCarrito}
-                            className="bg-black text-white p-2 rounded mb-4"
-                        >
-                            Ver carrito
-                        </button>
-                    </div>
-                );
-            })}
+            {/* GRID */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {productos.map((producto) => (
+                    <ProductoCard
+                        key={producto.id}
+                        producto={producto}
+                        agregarAlCarrito={agregarAlCarrito}
+                        goToCheckout={goToCheckout}
+                    />
+                ))}
+            </div>
         </div>
     );
 }
