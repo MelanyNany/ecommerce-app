@@ -6,7 +6,7 @@ import ResumenProducto from "../components/ResumenProducto";
 import CheckoutForm from "../components/CheckoutForm";
 import PagoModal from "../components/PagoModal";
 
-export default function Checkout({ producto, regresar }) {
+export default function Checkout({ items, regresar }) {
     const [nombre, setNombre] = useState("");
     const [direccion, setDireccion] = useState("");
     const [cp, setCp] = useState("");
@@ -17,7 +17,7 @@ export default function Checkout({ producto, regresar }) {
 
     const [mostrarModal, setMostrarModal] = useState(false);
     const [pagado, setPagado] = useState(false);
-
+    const total = items.reduce((acc, p) => acc + p.precio, 0);
     const consultarCP = async (cp) => {
         try {
             const res = await fetch("http://localhost:3001/api/cp", {
@@ -39,7 +39,8 @@ export default function Checkout({ producto, regresar }) {
     const simularPago = async () => {
         await addDoc(collection(db, "compra"), {
             usuario: auth.currentUser?.email || "invitado",
-            producto,
+            productos: items,
+            total,
             cliente: { nombre },
             envio: { cp, estado, municipio, colonia, direccion },
             fecha: new Date(),
@@ -58,8 +59,11 @@ export default function Checkout({ producto, regresar }) {
             <h2 className="text-2xl font-bold mb-4">Checkout</h2>
 
             <div className="space-y-4 max-w-md mx-auto">
-                <ResumenProducto producto={producto} />
-
+                <div className="space-y-3">
+                    {items.map((p, i) => (
+                        <ResumenProducto key={i} producto={p} />
+                    ))}
+                </div>
                 <CheckoutForm
                     {...{
                         nombre, setNombre,
@@ -70,7 +74,12 @@ export default function Checkout({ producto, regresar }) {
                         consultarCP
                     }}
                 />
-
+                <div className="bg-black/50 border border-purple-400 p-4 rounded-xl text-center">
+                    <p>Total:</p>
+                    <p className="text-2xl text-green-400 font-bold">
+                        ${total}
+                    </p>
+                </div>
                 <button
                     onClick={() => setMostrarModal(true)}
                     className="btn-neon-purple w-full"

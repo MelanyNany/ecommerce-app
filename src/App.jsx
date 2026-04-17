@@ -13,9 +13,8 @@ function App() {
   const { usuario, logout } = useAuth();
 
   const [pantalla, setPantalla] = useState("inicio");
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [carrito, setCarrito] = useState([]);
-
+  const [itemsCheckout, setItemsCheckout] = useState([]);
   const agregarAlCarrito = (producto) => {
     setCarrito(prev => [...prev, producto]);
   };
@@ -32,7 +31,7 @@ function App() {
     case "checkout":
       contenido = (
         <Checkout
-          producto={productoSeleccionado}
+          items={itemsCheckout}
           regresar={() => setPantalla("inicio")}
         />
       );
@@ -43,7 +42,10 @@ function App() {
         <Carrito
           carrito={carrito}
           irAInicio={() => setPantalla("inicio")}
-          irACheckout={() => setPantalla("checkout")}
+          irACheckout={() => {
+            setItemsCheckout(carrito);
+            setPantalla("checkout");
+          }}
         />
       );
       break;
@@ -54,7 +56,7 @@ function App() {
           agregarAlCarrito={agregarAlCarrito}
           irAlCarrito={() => setPantalla("carrito")}
           goToCheckout={(producto) => {
-            setProductoSeleccionado(producto);
+            setItemsCheckout([producto]);
             setPantalla("checkout");
           }}
         />

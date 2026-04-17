@@ -59,8 +59,8 @@ export default function Carrito({ carrito, irAInicio, irACheckout }) {
                         onClick={irACheckout}
                         disabled={carrito.length === 0}
                         className={`flex-1 p-3 rounded-xl font-semibold transition ${carrito.length === 0
-                                ? "bg-gray-500"
-                                : "bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-105"
+                            ? "bg-gray-500"
+                            : "bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-105"
                             }`}
                     >
                         💳 Pagar

@@ -56,7 +56,7 @@ export default function ProductoCard({ producto, agregarAlCarrito, goToCheckout 
                 🛒 Agregar al carrito
             </button>
 
-            <button
+            {/* <button
                 onClick={() =>
                     goToCheckout({
                         ...producto,
@@ -67,7 +67,7 @@ export default function ProductoCard({ producto, agregarAlCarrito, goToCheckout 
                 className="w-full mt-2 bg-blue-600 hover:bg-blue-500 p-2 rounded-xl shadow-md"
             >
                 ⚡ Comprar ahora
-            </button>
+            </button> */}
         </div>
     );
 }
