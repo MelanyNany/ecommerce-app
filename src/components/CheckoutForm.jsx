@@ -3,7 +3,8 @@ export default function CheckoutForm({
     cp, setCp,
     estado, municipio,
     colonias, colonia, setColonia,
-    direccion, setDireccion,
+    calle,
+    numero,
     consultarCP
 }) {
     let timeout;
@@ -12,12 +13,14 @@ export default function CheckoutForm({
         <>
             <input
                 className="input-neon"
+                name="full_name"
                 placeholder="Nombre"
                 onChange={(e) => setNombre(e.target.value)}
             />
 
             <input
                 className="input-neon"
+                name="postal_code"
                 placeholder="Código Postal"
                 value={cp}
                 onChange={(e) => {
@@ -34,11 +37,25 @@ export default function CheckoutForm({
                 }}
             />
 
-            <input className="input-disabled" value={estado} placeholder="Estado" disabled />
-            <input className="input-disabled" value={municipio} placeholder="Municipio" disabled />
+            <input
+                className="input-disabled"
+                name="state"
+                value={estado}
+                placeholder="Estado"
+                disabled
+            />
+
+            <input
+                className="input-disabled"
+                name="city"
+                value={municipio}
+                placeholder="Municipio"
+                disabled
+            />
 
             <select
                 className="input-neon"
+                name="neighborhood"
                 value={colonia}
                 onChange={(e) => setColonia(e.target.value)}
             >
@@ -50,8 +67,20 @@ export default function CheckoutForm({
 
             <input
                 className="input-neon"
-                placeholder="Calle y número"
-                onChange={(e) => setDireccion(e.target.value)}
+                type="text"
+                name="street_address"
+                placeholder="Calle"
+                value={calle}
+                onChange={(e) => setCalle(e.target.value)}
+            />
+
+            <input
+                className="input-neon"
+                type="text"
+                name="house_number"
+                placeholder="Número"
+                value={numero}
+                onChange={(e) => setNumero(e.target.value)}
             />
         </>
     );

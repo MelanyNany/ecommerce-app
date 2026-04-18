@@ -11,7 +11,8 @@ import PagoModal from "../components/PagoModal";
 
 export default function Checkout({ items, regresar }) {
     const [nombre, setNombre] = useState("");
-    const [direccion, setDireccion] = useState("");
+    const [calle, setCalle] = useState("");
+    const [numero, setNumero] = useState("");
     const [cp, setCp] = useState("");
     const [estado, setEstado] = useState("");
     const [municipio, setMunicipio] = useState("");
@@ -21,6 +22,7 @@ export default function Checkout({ items, regresar }) {
     const [mostrarModal, setMostrarModal] = useState(false);
     const [pagado, setPagado] = useState(false);
     const total = items.reduce((acc, p) => acc + p.precio, 0);
+
     const consultarCP = async (cp) => {
         try {
             const res = await fetch("http://localhost:3001/api/cp", {
@@ -45,7 +47,7 @@ export default function Checkout({ items, regresar }) {
             productos: items,
             total,
             cliente: { nombre },
-            envio: { cp, estado, municipio, colonia, direccion },
+            envio: { cp, estado, municipio, colonia, calle, numero },
             fecha: new Date(),
         });
 
@@ -56,6 +58,8 @@ export default function Checkout({ items, regresar }) {
             confirmButtonColor: "#16a34a",
             background: "#0f172a",
             color: "#fff",
+        }).then(() => {
+            window.location.href = "/";
         });
     };
 
@@ -87,14 +91,15 @@ export default function Checkout({ items, regresar }) {
                             cp, setCp,
                             estado, municipio,
                             colonias, colonia, setColonia,
-                            direccion, setDireccion,
+                            calle, setCalle,
+                            numero, setNumero,
                             consultarCP
                         }}
                     />
 
                     <button
                         onClick={() => {
-                            if (!nombre || !cp || !estado || !colonia || !direccion) {
+                            if (!nombre || !cp || !estado || !colonia || !calle || !numero) {
                                 Swal.fire({
                                     icon: "warning",
                                     title: "Faltan datos",
