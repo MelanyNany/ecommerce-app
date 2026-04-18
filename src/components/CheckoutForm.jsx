@@ -3,7 +3,7 @@ export default function CheckoutForm({
     cp, setCp,
     estado, municipio,
     colonias, colonia, setColonia,
-    calle,
+    calle, setCalle, setNumero,
     numero,
     consultarCP
 }) {
