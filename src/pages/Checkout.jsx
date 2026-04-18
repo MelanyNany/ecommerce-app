@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { db, auth } from "../firebase/config";
 import { addDoc, collection } from "firebase/firestore";
+import Swal from "sweetalert2";
+
+import CheckoutResumen from "../components/CheckoutResumen";
 
 import ResumenProducto from "../components/ResumenProducto";
 import CheckoutForm from "../components/CheckoutForm";
@@ -46,54 +49,78 @@ export default function Checkout({ items, regresar }) {
             fecha: new Date(),
         });
 
-        setPagado(true);
+        Swal.fire({
+            icon: "success",
+            title: "Pago exitoso 🎉",
+            text: "Tu compra ha sido registrada",
+            confirmButtonColor: "#16a34a",
+            background: "#0f172a",
+            color: "#fff",
+        });
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-black via-purple-900 to-blue-900 p-6 text-white">
 
-            <button onClick={regresar} className="mb-4 text-blue-400">
+            {/* HEADER */}
+            <button onClick={regresar} className="mb-6 text-blue-400">
                 ← Seguir comprando
             </button>
 
-            <h2 className="text-2xl font-bold mb-4">Checkout</h2>
+            <h2 className="text-3xl font-bold mb-6 text-purple-400">
+                💳 Checkout
+            </h2>
 
-            <div className="space-y-4 max-w-md mx-auto">
-                <div className="space-y-3">
-                    {items.map((p, i) => (
-                        <ResumenProducto key={i} producto={p} />
-                    ))}
-                </div>
-                <CheckoutForm
-                    {...{
-                        nombre, setNombre,
-                        cp, setCp,
-                        estado, municipio,
-                        colonias, colonia, setColonia,
-                        direccion, setDireccion,
-                        consultarCP
-                    }}
-                />
-                <div className="bg-black/50 border border-purple-400 p-4 rounded-xl text-center">
-                    <p>Total:</p>
-                    <p className="text-2xl text-green-400 font-bold">
-                        ${total}
-                    </p>
-                </div>
-                <button
-                    onClick={() => setMostrarModal(true)}
-                    className="btn-neon-purple w-full"
-                >
-                    Pagar
-                </button>
+            {/* GRID PRINCIPAL */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
 
-                {pagado && (
-                    <p className="text-green-400 text-center font-bold">
-                        Pago exitoso 🎉
-                    </p>
-                )}
+                {/* 🧾 IZQUIERDA - FORMULARIO */}
+                <div className="bg-black/40 border border-purple-500 p-6 rounded-2xl shadow-xl">
+
+                    <h3 className="text-xl font-bold mb-4 text-purple-300">
+                        📦 Datos de envío
+                    </h3>
+
+                    <CheckoutForm
+                        {...{
+                            nombre, setNombre,
+                            cp, setCp,
+                            estado, municipio,
+                            colonias, colonia, setColonia,
+                            direccion, setDireccion,
+                            consultarCP
+                        }}
+                    />
+
+                    <button
+                        onClick={() => {
+                            if (!nombre || !cp || !estado || !colonia || !direccion) {
+                                Swal.fire({
+                                    icon: "warning",
+                                    title: "Faltan datos",
+                                    text: "Completa todos los datos de envío 📦",
+                                    confirmButtonColor: "#7c3aed", // morado
+                                    background: "#0f172a",
+                                    color: "#fff",
+                                });
+                                return;
+                            }
+
+                            setMostrarModal(true);
+                        }}
+                        className="btn-neon-purple w-full mt-6"
+                    >
+                        💳 Continuar al pago
+                    </button>
+
+                </div>
+
+                {/* 🛍️ DERECHA - RESUMEN */}
+                <CheckoutResumen items={items} total={total} />
+
             </div>
 
+            {/* MODAL */}
             {mostrarModal && (
                 <PagoModal
                     onClose={() => setMostrarModal(false)}
@@ -103,6 +130,8 @@ export default function Checkout({ items, regresar }) {
                     }}
                 />
             )}
+
+
         </div>
     );
 }

@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/config";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import RegisterModal from "../components/RegisterModal";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [mostrarRegistro, setMostrarRegistro] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -63,8 +66,8 @@ function Login() {
                 <button
                     disabled={loading}
                     className={`w-full p-3 rounded-lg font-semibold transition-all ${loading
-                            ? "bg-gray-600"
-                            : "bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-105"
+                        ? "bg-gray-600"
+                        : "bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-105"
                         }`}
                 >
                     {loading ? "Cargando..." : "Entrar"}
@@ -73,13 +76,23 @@ function Login() {
                 {/* EXTRA */}
                 <p className="text-center text-sm text-gray-400 mt-4">
                     ¿No tienes cuenta?{" "}
-                    <span className="text-blue-400 cursor-pointer hover:underline">
+                    <span
+                        onClick={() => setMostrarRegistro(true)}
+                        className="text-blue-400 cursor-pointer hover:underline"
+                    >
                         Regístrate
                     </span>
                 </p>
             </form>
+            {
+                mostrarRegistro && (
+                    <RegisterModal onClose={() => setMostrarRegistro(false)} />
+                )
+            }
         </div>
+
     );
+
 }
 
 export default Login;

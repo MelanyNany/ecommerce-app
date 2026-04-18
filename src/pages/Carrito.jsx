@@ -10,7 +10,7 @@ export default function Carrito({ carrito, irAInicio, irACheckout }) {
             </h2>
 
             {/* CONTENIDO */}
-            <div className="max-w-md mx-auto space-y-4">
+            <div className="max-w-5xl mx-auto">
 
                 {carrito.length === 0 ? (
                     <div className="text-center bg-black/40 border border-purple-500 p-6 rounded-xl">
@@ -20,34 +20,54 @@ export default function Carrito({ carrito, irAInicio, irACheckout }) {
                         </p>
                     </div>
                 ) : (
-                    carrito.map((item, i) => (
-                        <div
-                            key={i}
-                            className="bg-black/40 border border-blue-500 p-4 rounded-xl shadow-lg hover:scale-[1.02] transition"
-                        >
-                            <p className="font-bold text-lg">{item.nombre}</p>
-                            <p className="text-blue-300">${item.precio}</p>
+                    <>
+                        {/* 🔥 GRID */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-                            <div className="text-sm text-gray-300 mt-1">
-                                <p>Talla: {item.talla}</p>
-                                <p>Color: {item.color}</p>
-                            </div>
+                            {carrito.map((item, i) => (
+                                <div
+                                    key={i}
+                                    className="bg-black/40 border border-blue-500 p-4 rounded-xl shadow-lg hover:scale-[1.02] transition flex gap-4 items-center"
+                                >
+
+                                    {/* 🖼️ IMAGEN MINI */}
+                                    <img
+                                        src={item.imagen}
+                                        alt={item.nombre}
+                                        className="w-20 h-20 object-cover rounded-lg border border-purple-400"
+                                    />
+
+                                    {/* 📦 INFO */}
+                                    <div className="flex-1">
+                                        <p className="font-bold text-lg">
+                                            {item.nombre}
+                                        </p>
+
+                                        <p className="text-blue-300">
+                                            ${item.precio}
+                                        </p>
+
+                                        <div className="text-sm text-gray-300 mt-1">
+                                            <p>Talla: {item.talla}</p>
+                                            <p>Color: {item.color}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))
-                )}
 
-                {/* TOTAL */}
-                {carrito.length > 0 && (
-                    <div className="bg-black/50 border border-purple-400 p-4 rounded-xl text-center">
-                        <p className="text-lg">Total:</p>
-                        <p className="text-2xl font-bold text-green-400">
-                            ${total}
-                        </p>
-                    </div>
+                        {/* TOTAL */}
+                        <div className="bg-black/50 border border-purple-400 p-4 rounded-xl text-center mt-6">
+                            <p className="text-lg">Total:</p>
+                            <p className="text-2xl font-bold text-green-400">
+                                ${total}
+                            </p>
+                        </div>
+                    </>
                 )}
 
                 {/* BOTONES */}
-                <div className="flex gap-3">
+                <div className="flex gap-3 mt-6">
                     <button
                         onClick={irAInicio}
                         className="flex-1 bg-gray-700 hover:bg-gray-600 p-3 rounded-xl transition"
@@ -59,8 +79,8 @@ export default function Carrito({ carrito, irAInicio, irACheckout }) {
                         onClick={irACheckout}
                         disabled={carrito.length === 0}
                         className={`flex-1 p-3 rounded-xl font-semibold transition ${carrito.length === 0
-                            ? "bg-gray-500"
-                            : "bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-105"
+                                ? "bg-gray-500"
+                                : "bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-105"
                             }`}
                     >
                         💳 Pagar
