@@ -4,14 +4,17 @@ const axios = require("axios");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+    origin: "*", // luego puedes cambiarlo a tu dominio Firebase
+}));
+
 app.use(express.json());
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 
 // 🔐 TOKEN FEDEX
-
 const getToken = async () => {
     const res = await axios.post(
         "https://apis-sandbox.fedex.com/oauth/token",
@@ -25,8 +28,7 @@ const getToken = async () => {
 };
 
 
-// 📮 1️⃣ SEPOMEX (AUTOCOMPLETE DIRECCIÓN)
-
+// 📮 CP (SEPOMEX)
 app.post("/api/cp", async (req, res) => {
     try {
         const response = await axios.get(
@@ -35,7 +37,7 @@ app.post("/api/cp", async (req, res) => {
 
         const lista = response.data.zip_codes;
 
-        if (!lista || lista.length === 0) {
+        if (!lista?.length) {
             return res.json({
                 estado: "",
                 municipio: "",
@@ -46,18 +48,16 @@ app.post("/api/cp", async (req, res) => {
         res.json({
             estado: lista[0].d_estado,
             municipio: lista[0].d_mnpio,
-            colonias: lista.map((item) => item.d_asenta),
+            colonias: lista.map((i) => i.d_asenta),
         });
 
     } catch (error) {
-        console.error("SEPOMEX error:", error.message);
         res.status(500).json({ error: "Error CP" });
     }
 });
 
 
-// 🚚 2️⃣ FEDEX (VALIDAR ENVÍO)
-
+// 🚚 FEDEX
 app.post("/api/fedex-validate", async (req, res) => {
     try {
         const token = await getToken();
@@ -80,14 +80,13 @@ app.post("/api/fedex-validate", async (req, res) => {
             }
         );
 
-        console.log("FedEx:", JSON.stringify(response.data, null, 2));
-
         res.json(response.data);
 
     } catch (error) {
-        console.error(error.response?.data || error.message);
         res.status(500).json({ error: "Error FedEx" });
     }
 });
 
-app.listen(PORT, () => console.log("Backend en puerto " + PORT));
+app.listen(PORT, () => {
+    console.log("Backend en puerto " + PORT);
+});
