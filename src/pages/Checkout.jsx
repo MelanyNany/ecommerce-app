@@ -25,7 +25,7 @@ export default function Checkout({ items, regresar }) {
 
     const consultarCP = async (cp) => {
         try {
-            const res = await fetch("http://localhost:3001/api/cp", {
+            const res = await fetch("https://ecommerce-app-1-ojur.onrender.com/api/cp", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ cp }),
